@@ -3,25 +3,18 @@ import marked from 'marked';
 
 
 
-marked.setOptions({
-  renderer: new marked.Renderer(),
-  gfm: true,
-  tables: true,
-  breaks: false,
-  pedantic: false,
-  sanitize: true,
-  smartLists: true,
-  smartypants: false,
-});
-
-
 class App extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      markdown : ''
+      input : ""
     }
+  }
+
+  convetToMarkdown() {
+    let md = marked(this.state.input, {sanitize: true});
+    return {__html : md};
   }
 
   render() {
@@ -29,14 +22,12 @@ class App extends Component {
       <div className='container'>        
         <div className='screen'>
         <h4>Editor</h4>
-          <textarea id='editor' onInput={(e) => this.setState({markdown : e.target.value}) }/>
+          <textarea id='editor' onInput={(e) => this.setState({input : e.target.value})}/>
         </div>
 
         <div className='screen'>
           <h4>Preview</h4>
-          <div id='preview'>
-            {marked(this.state.markdown)}
-          </div>
+          <div id='preview' dangerouslySetInnerHTML={this.convetToMarkdown()}></div>
         </div>
       </div>
     )
